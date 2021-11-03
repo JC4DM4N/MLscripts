@@ -1,5 +1,5 @@
 """
-A script to run a simple example of TD learning.
+A script to run a simple example of Temporal Difference (TD) learning.
 Random walk between states A through G, with a 50% probability of moving left and right at each timestep.
 Terminal state A has a value of 0, and terminal state G has a reward of +1
 System initially looks like:
