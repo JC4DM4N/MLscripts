@@ -47,6 +47,7 @@ def update_values(Vt, all_positions):
     Note: Don't double count the reward at terminal states.
     """
     total_steps = len(all_positions)
+    Vt_new = Vt.copy()
     for i, position in enumerate(all_positions):
         if position==0 or position==6:
             # don't update values for the terminal states
@@ -55,8 +56,8 @@ def update_values(Vt, all_positions):
         all_rewards = get_rewards(all_positions[i+1:])
         # calculate the discounted rewards for this state
         Gt = sum([reward*gamma**j for j, reward in enumerate(all_rewards)])
-        Vt[position] += alpha*(Gt - Vt[position])
-    return Vt
+        Vt_new[position] += alpha*(Gt - Vt[position])
+    return Vt_new
 
 Vt = np.asarray([0.,0.,0.,0.,0.,0.,1.])
 alpha = 0.1
