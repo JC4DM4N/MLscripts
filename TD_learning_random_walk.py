@@ -57,14 +57,17 @@ gamma = 1.0
 position = 3
 
 # number of episodes
-N = 50000
+N = 5000
 for i in range(N):
-    new_position = move(position)
-    Vt = update_values(Vt, position, new_position)
-    position = new_position
-    if position==0 or position==6:
-        # terminate and start again
-        position = 3
+    terminate = False
+    while not terminate:
+        new_position = move(position)
+        Vt = update_values(Vt, position, new_position)
+        position = new_position
+        if position==0 or position==6:
+            # terminate and start again
+            position = 3
+            terminate = True
 
 print("Predicted values of states A to G:")
 print(Vt)
