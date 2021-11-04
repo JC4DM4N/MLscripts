@@ -20,6 +20,11 @@ class Cliff():
                                  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                                  ["S", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "G"]])
         self.end = False
+        self.verbose = True
+
+    def reset(self):
+        self.pos = (3, 0) # start in bottom left corner
+        self.end = False
 
     def check_valid_move(self, new_pos):
         # check validity of move
@@ -32,8 +37,9 @@ class Cliff():
         else:
             # the attempted move is invalid, don't move the agent
             valid = False
+        return valid
 
-    def next_pos(self, action):
+    def move_agent(self, action):
         if action=="up":
             new_pos = (self.pos[0] - 1, self.pos[1])
         elif action=="down":
@@ -63,6 +69,8 @@ class Cliff():
             return -1
         elif self.board[self.pos] == "G":
             return -1
+        elif self.board[self.pos] == "S":
+            return -1
         elif self.board[self.pos] == "*":
             return -100
 
@@ -86,14 +94,11 @@ class Cliff():
         if not self.check_valid_move(new_pos):
             # the attempted move is invalid, don't move the agent
             new_pos = self.pos
-        try:
-            if self.board[new_pos] == "0":
-                return -1
-            elif self.board[new_pos] == "G":
-                return -1
-            elif self.board[new_pos] == "S":
-                return -1
-            elif self.board[new_pos] == "*":
-                return -100
-        except:
-            import pdb; pdb.set_trace()
+        if self.board[new_pos] == "0":
+            return -1
+        elif self.board[new_pos] == "G":
+            return -1
+        elif self.board[new_pos] == "S":
+            return -1
+        elif self.board[new_pos] == "*":
+            return -100
