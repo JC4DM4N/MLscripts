@@ -29,6 +29,7 @@ def plot_route(states):
                 route[i,j] = -1
     plt.figure()
     plt.imshow(route)
+    plt.tight_layout()
 
 def plot_state_values(states_action_values,strategy):
     board = Cliff().board
@@ -45,7 +46,8 @@ def plot_state_values(states_action_values,strategy):
                 values[i,j] = np.max([states_action_values[i,j][a] for a in Agent().actions])
     plt.figure()
     plt.imshow(values)
-    plt.colorbar()q
+    plt.colorbar()
+    plt.tight_layout()
 
 agent = Agent()
 agent.play(strategy="Q")
