@@ -45,7 +45,7 @@ def plot_state_values(states_action_values,strategy):
                 values[i,j] = np.max([states_action_values[i,j][a] for a in Agent().actions])
     plt.figure()
     plt.imshow(values)
-    plt.colorbar()
+    plt.colorbar()q
 
 agent = Agent()
 agent.play(strategy="Q")
