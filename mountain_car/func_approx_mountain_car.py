@@ -4,6 +4,7 @@ Using linear expectation model where q(s,a) = dot(w(s,a).T, x(s))
 
 import gym
 import numpy as np
+import matplotlib.pyplot as plt
 
 import tiles3 as tiles
 
@@ -84,10 +85,32 @@ class MountainCar():
         dw = self.alpha*TD_loss
         self.weights[action][active_tiles] += dw
 
+def plot_value_func(MC):
+    Prange = np.linspace(MC.env.observation_space.low[0], MC.env.observation_space.high[0], 100)
+    Vrange = np.linspace(MC.env.observation_space.low[1], MC.env.observation_space.high[1], 100)
+    values = []
+    for p in Prange:
+        values_for_p = []
+        for v in Vrange:
+            active = MC.get_active_tiles([p, v])
+            value = max(MC.calc_Q(a, active) for a in range(MC.env.action_space.n))
+            values_for_p.append(value)
+        values.append(values_for_p)
+
+    X, Y = np.meshgrid(Prange, Vrange)
+    values = np.asarray(values)
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+    ax.plot_surface(X, Y, values)
+    ax.set_xlabel('Position')
+    ax.set_ylabel('Velocity')
+    ax.set_zlabel('Value')
+    plt.show()
+
 def main():
     # initialise the MountainCar class
     MC = MountainCar()
-    nepisodes = 10000
+    nepisodes = 500
     for N in range(nepisodes):
         print(f"Starting episode {N}")
         # reset environment
@@ -113,8 +136,7 @@ def main():
             if done: # or num_steps == 200:
                 break
         print(f"Episode completed in {num_steps} steps with a final reward {reward}")
-    import pdb ; pdb.set_trace()
-    print()
+    plot_value_func(MC)
 
 if __name__=="__main__":
     main()
