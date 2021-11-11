@@ -1,3 +1,7 @@
+"""
+Using linear expectation model where q(s,a) = dot(w(s,a).T, x(s))
+"""
+
 import gym
 import numpy as np
 
@@ -16,7 +20,7 @@ class MountainCar():
         self.weights = np.zeros([self.env.action_space.n, self.maxsize])
         # hyperparameters
         self.gamma = 1.0 # memory
-        self.alpha = 0.1 # learning rate
+        self.alpha = 0.01 # learning rate
         self.epsilon = 0.1 # for epsilon-greedy policy
 
     def reset(self):
@@ -63,6 +67,8 @@ class MountainCar():
                 if value > max_reward:
                     next_action = action
                     max_reward = value
+        if next_action is None:
+            import pdb ; pdb.set_trace()
         return next_action
 
     def calc_Q(self, action, tiles):
@@ -76,13 +82,14 @@ class MountainCar():
         """
         TD_loss = Qpi - Qw
         dw = self.alpha*TD_loss
-        self.weights[action][active_tiles] -= dw
+        self.weights[action][active_tiles] += dw
 
 def main():
     # initialise the MountainCar class
     MC = MountainCar()
-    nepisodes = 1000
+    nepisodes = 10000
     for N in range(nepisodes):
+        print(f"Starting episode {N}")
         # reset environment
         MC.reset()
         num_steps = 0
@@ -103,9 +110,11 @@ def main():
 
             num_steps += 1
             # check if episode has completed
-            if reward == 0:
+            if done: # or num_steps == 200:
                 break
-        print(f"Episode completed in {num_steps} steps")
+        print(f"Episode completed in {num_steps} steps with a final reward {reward}")
+    import pdb ; pdb.set_trace()
+    print()
 
 if __name__=="__main__":
     main()
