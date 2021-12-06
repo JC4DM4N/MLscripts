@@ -14,14 +14,14 @@ class MountainCar():
         self.env = gym.make('MountainCar-v0')
         self.state = self.env.reset()
         # set up the tilings code
-        self.maxsize = 1024 # will give a 32x32 grid
+        self.maxsize = 512 # will give a 32x32 grid
         self.num_tilings = 8 # number of offset tilings
         self.iht = tiles.IHT(self.maxsize)
         # initialise weights
         self.weights = np.zeros([self.env.action_space.n, self.maxsize])
         # hyperparameters
         self.gamma = 1.0 # memory
-        self.alpha = 0.01 # learning rate
+        self.alpha = 0.1 # learning rate
         self.epsilon = 0.1 # for epsilon-greedy policy
 
     def reset(self):
@@ -55,7 +55,8 @@ class MountainCar():
         """
         Epsilon-greedy
         """
-        if np.random.random() < self.epsilon:
+        ###TRYING WITH GREEDY ONLY
+        if np.random.random() < 0: #self.epsilon:
             # choose a random action
             next_action = np.random.choice(range(self.env.action_space.n))
         else:
@@ -63,7 +64,7 @@ class MountainCar():
             # calc_Q for each action and take the action with the max Q
             max_reward = -999
             next_action = None
-            for action in range(self.env.action_space.n):
+            for action in range(self.env.action_space.n)[::-1]:
                 value = self.calc_Q(action, tiles)
                 if value > max_reward:
                     next_action = action
@@ -136,6 +137,7 @@ def main():
             if done: # or num_steps == 200:
                 break
         print(f"Episode completed in {num_steps} steps with a final reward {reward}")
+
     plot_value_func(MC)
 
 if __name__=="__main__":
